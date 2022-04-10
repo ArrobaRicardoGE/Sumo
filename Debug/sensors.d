@@ -1,1 +1,3 @@
-sensors.d sensors.o: .././sensors.c
+sensors.d sensors.o: .././sensors.c .././sensors.h
+
+.././sensors.h:

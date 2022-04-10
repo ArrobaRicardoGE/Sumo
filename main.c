@@ -18,12 +18,16 @@ int main(void)
     while (1) 
     {
 		_delay_ms(1000); 
+		w_set_speed(128); 
 		w_forwards(); 
 		_delay_ms(1000); 
+		w_set_speed(255);
 		w_backwards(); 
 		_delay_ms(1000);
+		w_set_speed(128); 
 		w_right(); 
 		_delay_ms(1000); 
+		w_set_speed(255);
 		w_left(); 
     }
 }

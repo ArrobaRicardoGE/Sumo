@@ -3,6 +3,7 @@
 
 #define F_CPU 1000000
 #include <avr/io.h>
+#include <stdint.h>
 
 #define PORTW PORTD
 #define DDRW DDRD
@@ -21,6 +22,8 @@ void w_right();
 
 void w_left();
 
- void w_stop();
+void w_stop();
+
+void w_set_speed(uint8_t speed);  
 
 #endif

@@ -3,29 +3,29 @@ Sumo.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000114  00000000  00000000  00000054  2**1
+  0 .text         00000154  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  00000168  2**0
+  1 .data         00000000  00800060  00800060  000001a8  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  00000168  2**0
+  2 .comment      00000030  00000000  00000000  000001a8  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000198  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001d8  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000070  00000000  00000000  000001d4  2**0
+  4 .debug_aranges 00000078  00000000  00000000  00000214  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000885  00000000  00000000  00000244  2**0
+  5 .debug_info   00000906  00000000  00000000  0000028c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000636  00000000  00000000  00000ac9  2**0
+  6 .debug_abbrev 00000676  00000000  00000000  00000b92  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000003cb  00000000  00000000  000010ff  2**0
+  7 .debug_line   0000043b  00000000  00000000  00001208  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000a8  00000000  00000000  000014cc  2**2
+  8 .debug_frame  000000b8  00000000  00000000  00001644  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000370  00000000  00000000  00001574  2**0
+  9 .debug_str    0000037c  00000000  00000000  000016fc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000120  00000000  00000000  000018e4  2**0
+ 10 .debug_loc    00000120  00000000  00000000  00001a78  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000050  00000000  00000000  00001a04  2**0
+ 11 .debug_ranges 00000058  00000000  00000000  00001b98  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -61,7 +61,7 @@ Disassembly of section .text:
   5c:	de bf       	out	0x3e, r29	; 62
   5e:	cd bf       	out	0x3d, r28	; 61
   60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
-  64:	0c 94 88 00 	jmp	0x110	; 0x110 <_exit>
+  64:	0c 94 a8 00 	jmp	0x150	; 0x150 <_exit>
 
 00000068 <__bad_interrupt>:
   68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -73,7 +73,7 @@ Disassembly of section .text:
 int main(void)
 {
     config_wheels(); 
-  6c:	0e 94 65 00 	call	0xca	; 0xca <config_wheels>
+  6c:	0e 94 71 00 	call	0xe2	; 0xe2 <config_wheels>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
@@ -92,119 +92,136 @@ int main(void)
     while (1) 
     {
 		_delay_ms(1000); 
+		w_set_speed(128); 
+  82:	80 e8       	ldi	r24, 0x80	; 128
+  84:	0e 94 a5 00 	call	0x14a	; 0x14a <w_set_speed>
 		w_forwards(); 
-  82:	0e 94 6c 00 	call	0xd8	; 0xd8 <w_forwards>
-  86:	2f e3       	ldi	r18, 0x3F	; 63
-  88:	8d e0       	ldi	r24, 0x0D	; 13
-  8a:	93 e0       	ldi	r25, 0x03	; 3
-  8c:	21 50       	subi	r18, 0x01	; 1
-  8e:	80 40       	sbci	r24, 0x00	; 0
-  90:	90 40       	sbci	r25, 0x00	; 0
-  92:	e1 f7       	brne	.-8      	; 0x8c <main+0x20>
-  94:	00 c0       	rjmp	.+0      	; 0x96 <main+0x2a>
-  96:	00 00       	nop
+  88:	0e 94 89 00 	call	0x112	; 0x112 <w_forwards>
+  8c:	2f e3       	ldi	r18, 0x3F	; 63
+  8e:	8d e0       	ldi	r24, 0x0D	; 13
+  90:	93 e0       	ldi	r25, 0x03	; 3
+  92:	21 50       	subi	r18, 0x01	; 1
+  94:	80 40       	sbci	r24, 0x00	; 0
+  96:	90 40       	sbci	r25, 0x00	; 0
+  98:	e1 f7       	brne	.-8      	; 0x92 <main+0x26>
+  9a:	00 c0       	rjmp	.+0      	; 0x9c <main+0x30>
+  9c:	00 00       	nop
 		_delay_ms(1000); 
+		w_set_speed(255);
+  9e:	8f ef       	ldi	r24, 0xFF	; 255
+  a0:	0e 94 a5 00 	call	0x14a	; 0x14a <w_set_speed>
 		w_backwards(); 
-  98:	0e 94 73 00 	call	0xe6	; 0xe6 <w_backwards>
-  9c:	2f e3       	ldi	r18, 0x3F	; 63
-  9e:	8d e0       	ldi	r24, 0x0D	; 13
-  a0:	93 e0       	ldi	r25, 0x03	; 3
-  a2:	21 50       	subi	r18, 0x01	; 1
-  a4:	80 40       	sbci	r24, 0x00	; 0
-  a6:	90 40       	sbci	r25, 0x00	; 0
-  a8:	e1 f7       	brne	.-8      	; 0xa2 <main+0x36>
-  aa:	00 c0       	rjmp	.+0      	; 0xac <main+0x40>
-  ac:	00 00       	nop
+  a4:	0e 94 90 00 	call	0x120	; 0x120 <w_backwards>
+  a8:	2f e3       	ldi	r18, 0x3F	; 63
+  aa:	8d e0       	ldi	r24, 0x0D	; 13
+  ac:	93 e0       	ldi	r25, 0x03	; 3
+  ae:	21 50       	subi	r18, 0x01	; 1
+  b0:	80 40       	sbci	r24, 0x00	; 0
+  b2:	90 40       	sbci	r25, 0x00	; 0
+  b4:	e1 f7       	brne	.-8      	; 0xae <main+0x42>
+  b6:	00 c0       	rjmp	.+0      	; 0xb8 <main+0x4c>
+  b8:	00 00       	nop
 		_delay_ms(1000);
+		w_set_speed(128); 
+  ba:	80 e8       	ldi	r24, 0x80	; 128
+  bc:	0e 94 a5 00 	call	0x14a	; 0x14a <w_set_speed>
 		w_right(); 
-  ae:	0e 94 7a 00 	call	0xf4	; 0xf4 <w_right>
-  b2:	2f e3       	ldi	r18, 0x3F	; 63
-  b4:	8d e0       	ldi	r24, 0x0D	; 13
-  b6:	93 e0       	ldi	r25, 0x03	; 3
-  b8:	21 50       	subi	r18, 0x01	; 1
-  ba:	80 40       	sbci	r24, 0x00	; 0
-  bc:	90 40       	sbci	r25, 0x00	; 0
-  be:	e1 f7       	brne	.-8      	; 0xb8 <main+0x4c>
-  c0:	00 c0       	rjmp	.+0      	; 0xc2 <main+0x56>
-  c2:	00 00       	nop
+  c0:	0e 94 97 00 	call	0x12e	; 0x12e <w_right>
+  c4:	2f e3       	ldi	r18, 0x3F	; 63
+  c6:	8d e0       	ldi	r24, 0x0D	; 13
+  c8:	93 e0       	ldi	r25, 0x03	; 3
+  ca:	21 50       	subi	r18, 0x01	; 1
+  cc:	80 40       	sbci	r24, 0x00	; 0
+  ce:	90 40       	sbci	r25, 0x00	; 0
+  d0:	e1 f7       	brne	.-8      	; 0xca <main+0x5e>
+  d2:	00 c0       	rjmp	.+0      	; 0xd4 <main+0x68>
+  d4:	00 00       	nop
 		_delay_ms(1000); 
+		w_set_speed(255);
+  d6:	8f ef       	ldi	r24, 0xFF	; 255
+  d8:	0e 94 a5 00 	call	0x14a	; 0x14a <w_set_speed>
 		w_left(); 
-  c4:	0e 94 81 00 	call	0x102	; 0x102 <w_left>
-  c8:	d3 cf       	rjmp	.-90     	; 0x70 <main+0x4>
+  dc:	0e 94 9e 00 	call	0x13c	; 0x13c <w_left>
+  e0:	c7 cf       	rjmp	.-114    	; 0x70 <main+0x4>
 
-000000ca <config_wheels>:
-#include "wheels.h"
-
-void config_wheels() {
-	DDRW = (1 << RW_IN1)|(1 << RW_IN2)|(1 << LW_IN1)|(1 << LW_IN2);
-  ca:	8f e0       	ldi	r24, 0x0F	; 15
-  cc:	81 bb       	out	0x11, r24	; 17
-  ce:	08 95       	ret
-
-000000d0 <_enable_all>:
-}
-
-void _enable_all() {
-	PORTW |= (1 << RW_IN1)|(1 << LW_IN1)|(1 << RW_IN2)|(1 << LW_IN2);
-  d0:	82 b3       	in	r24, 0x12	; 18
-  d2:	8f 60       	ori	r24, 0x0F	; 15
-  d4:	82 bb       	out	0x12, r24	; 18
-  d6:	08 95       	ret
-
-000000d8 <w_forwards>:
-}
-
-void w_forwards() {
+000000e2 <config_wheels>:
 	_enable_all();
-  d8:	0e 94 68 00 	call	0xd0	; 0xd0 <_enable_all>
-	PORTW ^= ((1 << RW_IN2)|(1 << LW_IN2));
-  dc:	92 b3       	in	r25, 0x12	; 18
-  de:	8a e0       	ldi	r24, 0x0A	; 10
-  e0:	89 27       	eor	r24, r25
-  e2:	82 bb       	out	0x12, r24	; 18
-  e4:	08 95       	ret
-
-000000e6 <w_backwards>:
-}
-
-void w_backwards() {
-	_enable_all();
-  e6:	0e 94 68 00 	call	0xd0	; 0xd0 <_enable_all>
-	PORTW ^= ((1 << RW_IN1)|(1 << LW_IN1));
-  ea:	92 b3       	in	r25, 0x12	; 18
-  ec:	85 e0       	ldi	r24, 0x05	; 5
-  ee:	89 27       	eor	r24, r25
-  f0:	82 bb       	out	0x12, r24	; 18
-  f2:	08 95       	ret
-
-000000f4 <w_right>:
-}
-
-void w_right() {
-	_enable_all();
-  f4:	0e 94 68 00 	call	0xd0	; 0xd0 <_enable_all>
-	PORTW ^= ((1 << RW_IN1)|(1 << LW_IN2));
-  f8:	92 b3       	in	r25, 0x12	; 18
-  fa:	89 e0       	ldi	r24, 0x09	; 9
-  fc:	89 27       	eor	r24, r25
-  fe:	82 bb       	out	0x12, r24	; 18
- 100:	08 95       	ret
-
-00000102 <w_left>:
-}
-
-void w_left() {
-	_enable_all();
- 102:	0e 94 68 00 	call	0xd0	; 0xd0 <_enable_all>
 	PORTW ^= ((1 << RW_IN2)^(1 << LW_IN1));
- 106:	92 b3       	in	r25, 0x12	; 18
- 108:	86 e0       	ldi	r24, 0x06	; 6
- 10a:	89 27       	eor	r24, r25
- 10c:	82 bb       	out	0x12, r24	; 18
- 10e:	08 95       	ret
+}
 
-00000110 <_exit>:
- 110:	f8 94       	cli
+void w_stop() {
+	PORTW ^= ((1 << RW_IN1)|(1 << RW_IN2)|(1 << LW_IN1)|(1 << LW_IN2));
+  e2:	81 b3       	in	r24, 0x11	; 17
+  e4:	8f 60       	ori	r24, 0x0F	; 15
+  e6:	81 bb       	out	0x11, r24	; 17
+  e8:	8b e6       	ldi	r24, 0x6B	; 107
+  ea:	83 bf       	out	0x33, r24	; 51
+  ec:	1c be       	out	0x3c, r1	; 60
+  ee:	88 b3       	in	r24, 0x18	; 24
+  f0:	88 60       	ori	r24, 0x08	; 8
+  f2:	88 bb       	out	0x18, r24	; 24
+  f4:	85 b5       	in	r24, 0x25	; 37
+  f6:	88 64       	ori	r24, 0x48	; 72
+  f8:	85 bd       	out	0x25, r24	; 37
+  fa:	85 b5       	in	r24, 0x25	; 37
+  fc:	83 62       	ori	r24, 0x23	; 35
+  fe:	85 bd       	out	0x25, r24	; 37
+ 100:	13 bc       	out	0x23, r1	; 35
+ 102:	82 b3       	in	r24, 0x12	; 18
+ 104:	80 68       	ori	r24, 0x80	; 128
+ 106:	82 bb       	out	0x12, r24	; 18
+ 108:	08 95       	ret
 
-00000112 <__stop_program>:
- 112:	ff cf       	rjmp	.-2      	; 0x112 <__stop_program>
+0000010a <_enable_all>:
+ 10a:	82 b3       	in	r24, 0x12	; 18
+ 10c:	8f 60       	ori	r24, 0x0F	; 15
+ 10e:	82 bb       	out	0x12, r24	; 18
+ 110:	08 95       	ret
+
+00000112 <w_forwards>:
+ 112:	0e 94 85 00 	call	0x10a	; 0x10a <_enable_all>
+ 116:	92 b3       	in	r25, 0x12	; 18
+ 118:	8a e0       	ldi	r24, 0x0A	; 10
+ 11a:	89 27       	eor	r24, r25
+ 11c:	82 bb       	out	0x12, r24	; 18
+ 11e:	08 95       	ret
+
+00000120 <w_backwards>:
+ 120:	0e 94 85 00 	call	0x10a	; 0x10a <_enable_all>
+ 124:	92 b3       	in	r25, 0x12	; 18
+ 126:	85 e0       	ldi	r24, 0x05	; 5
+ 128:	89 27       	eor	r24, r25
+ 12a:	82 bb       	out	0x12, r24	; 18
+ 12c:	08 95       	ret
+
+0000012e <w_right>:
+ 12e:	0e 94 85 00 	call	0x10a	; 0x10a <_enable_all>
+ 132:	92 b3       	in	r25, 0x12	; 18
+ 134:	89 e0       	ldi	r24, 0x09	; 9
+ 136:	89 27       	eor	r24, r25
+ 138:	82 bb       	out	0x12, r24	; 18
+ 13a:	08 95       	ret
+
+0000013c <w_left>:
+ 13c:	0e 94 85 00 	call	0x10a	; 0x10a <_enable_all>
+ 140:	92 b3       	in	r25, 0x12	; 18
+ 142:	86 e0       	ldi	r24, 0x06	; 6
+ 144:	89 27       	eor	r24, r25
+ 146:	82 bb       	out	0x12, r24	; 18
+ 148:	08 95       	ret
+
+0000014a <w_set_speed>:
+}
+
+void w_set_speed(uint8_t speed) {
+	OCR0 = speed; 
+ 14a:	8c bf       	out	0x3c, r24	; 60
+	OCR2 = speed;
+ 14c:	83 bd       	out	0x23, r24	; 35
+ 14e:	08 95       	ret
+
+00000150 <_exit>:
+ 150:	f8 94       	cli
+
+00000152 <__stop_program>:
+ 152:	ff cf       	rjmp	.-2      	; 0x152 <__stop_program>
