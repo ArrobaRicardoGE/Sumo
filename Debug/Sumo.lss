@@ -3,29 +3,29 @@ Sumo.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000154  00000000  00000000  00000054  2**1
+  0 .text         00000140  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  000001a8  2**0
+  1 .data         00000000  00800060  00800060  00000194  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  000001a8  2**0
+  2 .comment      00000030  00000000  00000000  00000194  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001d8  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001c4  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000078  00000000  00000000  00000214  2**0
+  4 .debug_aranges 000000e0  00000000  00000000  00000200  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000906  00000000  00000000  0000028c  2**0
+  5 .debug_info   00000a1d  00000000  00000000  000002e0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000676  00000000  00000000  00000b92  2**0
+  6 .debug_abbrev 00000775  00000000  00000000  00000cfd  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   0000043b  00000000  00000000  00001208  2**0
+  7 .debug_line   00000505  00000000  00000000  00001472  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000b8  00000000  00000000  00001644  2**2
+  8 .debug_frame  00000150  00000000  00000000  00001978  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000037c  00000000  00000000  000016fc  2**0
+  9 .debug_str    000003a4  00000000  00000000  00001ac8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000120  00000000  00000000  00001a78  2**0
+ 10 .debug_loc    00000092  00000000  00000000  00001e6c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000058  00000000  00000000  00001b98  2**0
+ 11 .debug_ranges 000000a0  00000000  00000000  00001efe  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -61,7 +61,7 @@ Disassembly of section .text:
   5c:	de bf       	out	0x3e, r29	; 62
   5e:	cd bf       	out	0x3d, r28	; 61
   60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
-  64:	0c 94 a8 00 	jmp	0x150	; 0x150 <_exit>
+  64:	0c 94 9e 00 	jmp	0x13c	; 0x13c <_exit>
 
 00000068 <__bad_interrupt>:
   68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -73,155 +73,169 @@ Disassembly of section .text:
 int main(void)
 {
     config_wheels(); 
-  6c:	0e 94 71 00 	call	0xe2	; 0xe2 <config_wheels>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
-  70:	2f e3       	ldi	r18, 0x3F	; 63
-  72:	8d e0       	ldi	r24, 0x0D	; 13
-  74:	93 e0       	ldi	r25, 0x03	; 3
-  76:	21 50       	subi	r18, 0x01	; 1
-  78:	80 40       	sbci	r24, 0x00	; 0
-  7a:	90 40       	sbci	r25, 0x00	; 0
-  7c:	e1 f7       	brne	.-8      	; 0x76 <main+0xa>
-  7e:	00 c0       	rjmp	.+0      	; 0x80 <main+0x14>
-  80:	00 00       	nop
+  6c:	0e 94 78 00 	call	0xf0	; 0xf0 <config_wheels>
+	config_sensors(); 
+  70:	0e 94 46 00 	call	0x8c	; 0x8c <config_sensors>
     while (1) 
     {
-		_delay_ms(1000); 
-		w_set_speed(128); 
-  82:	80 e8       	ldi	r24, 0x80	; 128
-  84:	0e 94 a5 00 	call	0x14a	; 0x14a <w_set_speed>
-		w_forwards(); 
-  88:	0e 94 89 00 	call	0x112	; 0x112 <w_forwards>
-  8c:	2f e3       	ldi	r18, 0x3F	; 63
-  8e:	8d e0       	ldi	r24, 0x0D	; 13
-  90:	93 e0       	ldi	r25, 0x03	; 3
-  92:	21 50       	subi	r18, 0x01	; 1
-  94:	80 40       	sbci	r24, 0x00	; 0
-  96:	90 40       	sbci	r25, 0x00	; 0
-  98:	e1 f7       	brne	.-8      	; 0x92 <main+0x26>
-  9a:	00 c0       	rjmp	.+0      	; 0x9c <main+0x30>
-  9c:	00 00       	nop
-		_delay_ms(1000); 
-		w_set_speed(255);
-  9e:	8f ef       	ldi	r24, 0xFF	; 255
-  a0:	0e 94 a5 00 	call	0x14a	; 0x14a <w_set_speed>
-		w_backwards(); 
-  a4:	0e 94 90 00 	call	0x120	; 0x120 <w_backwards>
-  a8:	2f e3       	ldi	r18, 0x3F	; 63
-  aa:	8d e0       	ldi	r24, 0x0D	; 13
-  ac:	93 e0       	ldi	r25, 0x03	; 3
-  ae:	21 50       	subi	r18, 0x01	; 1
-  b0:	80 40       	sbci	r24, 0x00	; 0
-  b2:	90 40       	sbci	r25, 0x00	; 0
-  b4:	e1 f7       	brne	.-8      	; 0xae <main+0x42>
-  b6:	00 c0       	rjmp	.+0      	; 0xb8 <main+0x4c>
-  b8:	00 00       	nop
-		_delay_ms(1000);
-		w_set_speed(128); 
-  ba:	80 e8       	ldi	r24, 0x80	; 128
-  bc:	0e 94 a5 00 	call	0x14a	; 0x14a <w_set_speed>
-		w_right(); 
-  c0:	0e 94 97 00 	call	0x12e	; 0x12e <w_right>
-  c4:	2f e3       	ldi	r18, 0x3F	; 63
-  c6:	8d e0       	ldi	r24, 0x0D	; 13
-  c8:	93 e0       	ldi	r25, 0x03	; 3
-  ca:	21 50       	subi	r18, 0x01	; 1
-  cc:	80 40       	sbci	r24, 0x00	; 0
-  ce:	90 40       	sbci	r25, 0x00	; 0
-  d0:	e1 f7       	brne	.-8      	; 0xca <main+0x5e>
-  d2:	00 c0       	rjmp	.+0      	; 0xd4 <main+0x68>
-  d4:	00 00       	nop
-		_delay_ms(1000); 
-		w_set_speed(255);
-  d6:	8f ef       	ldi	r24, 0xFF	; 255
-  d8:	0e 94 a5 00 	call	0x14a	; 0x14a <w_set_speed>
-		w_left(); 
-  dc:	0e 94 9e 00 	call	0x13c	; 0x13c <w_left>
-  e0:	c7 cf       	rjmp	.-114    	; 0x70 <main+0x4>
+		if(read_ds(DS2) >= 512) w_left(); 
+  74:	81 e0       	ldi	r24, 0x01	; 1
+  76:	0e 94 4c 00 	call	0x98	; 0x98 <read_ds>
+  7a:	81 15       	cp	r24, r1
+  7c:	92 40       	sbci	r25, 0x02	; 2
+  7e:	18 f0       	brcs	.+6      	; 0x86 <main+0x1a>
+  80:	0e 94 97 00 	call	0x12e	; 0x12e <w_left>
+  84:	f7 cf       	rjmp	.-18     	; 0x74 <main+0x8>
+		else w_right(); 
+  86:	0e 94 90 00 	call	0x120	; 0x120 <w_right>
+  8a:	f4 cf       	rjmp	.-24     	; 0x74 <main+0x8>
 
-000000e2 <config_wheels>:
-	_enable_all();
-	PORTW ^= ((1 << RW_IN2)^(1 << LW_IN1));
+0000008c <config_sensors>:
+#include "sensors.h"
+
+void config_sensors() {
+	// ADC
+	ADMUX = 0b01000000;
+  8c:	80 e4       	ldi	r24, 0x40	; 64
+  8e:	87 b9       	out	0x07, r24	; 7
+	SFIOR = 0; 
+  90:	10 be       	out	0x30, r1	; 48
+	ADCSRA = 0b10010111;
+  92:	87 e9       	ldi	r24, 0x97	; 151
+  94:	86 b9       	out	0x06, r24	; 6
+  96:	08 95       	ret
+
+00000098 <read_ds>:
+	// Other sensors
+	// PORTS |= (1 << RBW)|(1 << LBW); 
 }
 
-void w_stop() {
-	PORTW ^= ((1 << RW_IN1)|(1 << RW_IN2)|(1 << LW_IN1)|(1 << LW_IN2));
-  e2:	81 b3       	in	r24, 0x11	; 17
-  e4:	8f 60       	ori	r24, 0x0F	; 15
-  e6:	81 bb       	out	0x11, r24	; 17
-  e8:	8b e6       	ldi	r24, 0x6B	; 107
-  ea:	83 bf       	out	0x33, r24	; 51
-  ec:	1c be       	out	0x3c, r1	; 60
-  ee:	88 b3       	in	r24, 0x18	; 24
-  f0:	88 60       	ori	r24, 0x08	; 8
-  f2:	88 bb       	out	0x18, r24	; 24
-  f4:	85 b5       	in	r24, 0x25	; 37
-  f6:	88 64       	ori	r24, 0x48	; 72
-  f8:	85 bd       	out	0x25, r24	; 37
-  fa:	85 b5       	in	r24, 0x25	; 37
-  fc:	83 62       	ori	r24, 0x23	; 35
-  fe:	85 bd       	out	0x25, r24	; 37
- 100:	13 bc       	out	0x23, r1	; 35
- 102:	82 b3       	in	r24, 0x12	; 18
- 104:	80 68       	ori	r24, 0x80	; 128
- 106:	82 bb       	out	0x12, r24	; 18
- 108:	08 95       	ret
+uint16_t read_ds(uint8_t idx) {
+	ADMUX &= 0b11100000;
+  98:	97 b1       	in	r25, 0x07	; 7
+  9a:	90 7e       	andi	r25, 0xE0	; 224
+  9c:	97 b9       	out	0x07, r25	; 7
+	ADMUX |= idx;
+  9e:	97 b1       	in	r25, 0x07	; 7
+  a0:	89 2b       	or	r24, r25
+  a2:	87 b9       	out	0x07, r24	; 7
+	saca_uno(&ADCSRA, 6);
+  a4:	66 e0       	ldi	r22, 0x06	; 6
+  a6:	86 e2       	ldi	r24, 0x26	; 38
+  a8:	90 e0       	ldi	r25, 0x00	; 0
+  aa:	0e 94 6c 00 	call	0xd8	; 0xd8 <saca_uno>
+	while(uno_en_bit(&ADCSRA, 6));
+  ae:	66 e0       	ldi	r22, 0x06	; 6
+  b0:	86 e2       	ldi	r24, 0x26	; 38
+  b2:	90 e0       	ldi	r25, 0x00	; 0
+  b4:	0e 94 61 00 	call	0xc2	; 0xc2 <uno_en_bit>
+  b8:	81 11       	cpse	r24, r1
+  ba:	f9 cf       	rjmp	.-14     	; 0xae <read_ds+0x16>
+	return ADC;
+  bc:	84 b1       	in	r24, 0x04	; 4
+  be:	95 b1       	in	r25, 0x05	; 5
+}
+  c0:	08 95       	ret
 
-0000010a <_enable_all>:
- 10a:	82 b3       	in	r24, 0x12	; 18
- 10c:	8f 60       	ori	r24, 0x0F	; 15
- 10e:	82 bb       	out	0x12, r24	; 18
- 110:	08 95       	ret
+000000c2 <uno_en_bit>:
+uint8_t cero_en_bit(volatile uint8_t *LUGAR, uint8_t BIT){
+	return (!(*LUGAR&(1<<BIT)));
+}
 
-00000112 <w_forwards>:
- 112:	0e 94 85 00 	call	0x10a	; 0x10a <_enable_all>
- 116:	92 b3       	in	r25, 0x12	; 18
- 118:	8a e0       	ldi	r24, 0x0A	; 10
- 11a:	89 27       	eor	r24, r25
+uint8_t uno_en_bit(volatile uint8_t *LUGAR, uint8_t BIT){
+	return (*LUGAR&(1<<BIT));
+  c2:	fc 01       	movw	r30, r24
+  c4:	20 81       	ld	r18, Z
+  c6:	81 e0       	ldi	r24, 0x01	; 1
+  c8:	90 e0       	ldi	r25, 0x00	; 0
+  ca:	02 c0       	rjmp	.+4      	; 0xd0 <uno_en_bit+0xe>
+  cc:	88 0f       	add	r24, r24
+  ce:	99 1f       	adc	r25, r25
+  d0:	6a 95       	dec	r22
+  d2:	e2 f7       	brpl	.-8      	; 0xcc <uno_en_bit+0xa>
+}
+  d4:	82 23       	and	r24, r18
+  d6:	08 95       	ret
+
+000000d8 <saca_uno>:
+
+void saca_uno(volatile uint8_t *LUGAR, uint8_t BIT){
+	*LUGAR=*LUGAR|(1<<BIT);
+  d8:	fc 01       	movw	r30, r24
+  da:	40 81       	ld	r20, Z
+  dc:	21 e0       	ldi	r18, 0x01	; 1
+  de:	30 e0       	ldi	r19, 0x00	; 0
+  e0:	02 c0       	rjmp	.+4      	; 0xe6 <saca_uno+0xe>
+  e2:	22 0f       	add	r18, r18
+  e4:	33 1f       	adc	r19, r19
+  e6:	6a 95       	dec	r22
+  e8:	e2 f7       	brpl	.-8      	; 0xe2 <saca_uno+0xa>
+  ea:	24 2b       	or	r18, r20
+  ec:	20 83       	st	Z, r18
+  ee:	08 95       	ret
+
+000000f0 <config_wheels>:
+	PORTW ^= ((1 << RW_IN2)|(1 << LW_IN2));
+}
+
+void w_backwards() {
+	_enable_all();
+	PORTW ^= ((1 << RW_IN1)|(1 << LW_IN1));
+  f0:	81 b3       	in	r24, 0x11	; 17
+  f2:	8f 60       	ori	r24, 0x0F	; 15
+  f4:	81 bb       	out	0x11, r24	; 17
+  f6:	8b e6       	ldi	r24, 0x6B	; 107
+  f8:	83 bf       	out	0x33, r24	; 51
+  fa:	1c be       	out	0x3c, r1	; 60
+  fc:	88 b3       	in	r24, 0x18	; 24
+  fe:	88 60       	ori	r24, 0x08	; 8
+ 100:	88 bb       	out	0x18, r24	; 24
+ 102:	85 b5       	in	r24, 0x25	; 37
+ 104:	88 64       	ori	r24, 0x48	; 72
+ 106:	85 bd       	out	0x25, r24	; 37
+ 108:	85 b5       	in	r24, 0x25	; 37
+ 10a:	83 62       	ori	r24, 0x23	; 35
+ 10c:	85 bd       	out	0x25, r24	; 37
+ 10e:	13 bc       	out	0x23, r1	; 35
+ 110:	82 b3       	in	r24, 0x12	; 18
+ 112:	80 68       	ori	r24, 0x80	; 128
+ 114:	82 bb       	out	0x12, r24	; 18
+ 116:	08 95       	ret
+
+00000118 <_enable_all>:
+ 118:	82 b3       	in	r24, 0x12	; 18
+ 11a:	8f 60       	ori	r24, 0x0F	; 15
  11c:	82 bb       	out	0x12, r24	; 18
  11e:	08 95       	ret
 
-00000120 <w_backwards>:
- 120:	0e 94 85 00 	call	0x10a	; 0x10a <_enable_all>
+00000120 <w_right>:
+}
+
+void w_right() {
+	_enable_all();
+ 120:	0e 94 8c 00 	call	0x118	; 0x118 <_enable_all>
+	PORTW ^= ((1 << RW_IN1)|(1 << LW_IN2));
  124:	92 b3       	in	r25, 0x12	; 18
- 126:	85 e0       	ldi	r24, 0x05	; 5
+ 126:	89 e0       	ldi	r24, 0x09	; 9
  128:	89 27       	eor	r24, r25
  12a:	82 bb       	out	0x12, r24	; 18
  12c:	08 95       	ret
 
-0000012e <w_right>:
- 12e:	0e 94 85 00 	call	0x10a	; 0x10a <_enable_all>
+0000012e <w_left>:
+}
+
+void w_left() {
+	_enable_all();
+ 12e:	0e 94 8c 00 	call	0x118	; 0x118 <_enable_all>
+	PORTW ^= ((1 << RW_IN2)^(1 << LW_IN1));
  132:	92 b3       	in	r25, 0x12	; 18
- 134:	89 e0       	ldi	r24, 0x09	; 9
+ 134:	86 e0       	ldi	r24, 0x06	; 6
  136:	89 27       	eor	r24, r25
  138:	82 bb       	out	0x12, r24	; 18
  13a:	08 95       	ret
 
-0000013c <w_left>:
- 13c:	0e 94 85 00 	call	0x10a	; 0x10a <_enable_all>
- 140:	92 b3       	in	r25, 0x12	; 18
- 142:	86 e0       	ldi	r24, 0x06	; 6
- 144:	89 27       	eor	r24, r25
- 146:	82 bb       	out	0x12, r24	; 18
- 148:	08 95       	ret
+0000013c <_exit>:
+ 13c:	f8 94       	cli
 
-0000014a <w_set_speed>:
-}
-
-void w_set_speed(uint8_t speed) {
-	OCR0 = speed; 
- 14a:	8c bf       	out	0x3c, r24	; 60
-	OCR2 = speed;
- 14c:	83 bd       	out	0x23, r24	; 35
- 14e:	08 95       	ret
-
-00000150 <_exit>:
- 150:	f8 94       	cli
-
-00000152 <__stop_program>:
- 152:	ff cf       	rjmp	.-2      	; 0x152 <__stop_program>
+0000013e <__stop_program>:
+ 13e:	ff cf       	rjmp	.-2      	; 0x13e <__stop_program>

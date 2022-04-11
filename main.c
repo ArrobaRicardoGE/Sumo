@@ -9,26 +9,18 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "wheels.h"
+#include "sensors.h"
 
 
 
 int main(void)
 {
     config_wheels(); 
+	config_sensors(); 
     while (1) 
     {
-		_delay_ms(1000); 
-		w_set_speed(128); 
-		w_forwards(); 
-		_delay_ms(1000); 
-		w_set_speed(255);
-		w_backwards(); 
-		_delay_ms(1000);
-		w_set_speed(128); 
-		w_right(); 
-		_delay_ms(1000); 
-		w_set_speed(255);
-		w_left(); 
+		if(read_ds(DS2) >= 512) w_left(); 
+		else w_right(); 
     }
 }
 
